@@ -1,48 +1,54 @@
-public class StringCalculator
-    {
-        public int AddNumbers(string args)
-        {
-            if (string.IsNullOrEmpty(args))
-            {
-                return 0;
-            }
+package calculator;
 
-            var delimeters = new List<char>()
-                                    {
-                                        '\n',','
-                                    };
+class StringCalculator {
 
-            if (args[0] == '/')
-            {
-                var customDelimeter = args[2];
-                delimeters.Add(customDelimeter);
-                args = args.Remove(0,
-                                   3);
-
-            }
-
-            var numbers = args.ToCharArray().Where(x => !delimeters.Contains(x)).ToList();
-
-            if (numbers.Any(x => x == '-'))
-            {
-                StringBuilder stringBuilder= new StringBuilder();
-                for (int i = 0;
-                     i < numbers.Count;
-                     i++)
-                {
-                    if (numbers[i] == '-')
-                    {
-                        stringBuilder.Append("-");
-                        stringBuilder.Append(numbers[++i]);
-                        stringBuilder.Append(", ");
-                    }    
-                }
-
-                throw new Exception(string.Format("negatives {0} not allowed",stringBuilder.ToString()));
-            }
-
-            var sum = numbers.Sum(x => (int)Char.GetNumericValue(x));
-
-            return sum;
+	private final String delimiter = ",|\n|;|/";
+	
+    public int add(String input) throws Exception {
+    	String[] numbers = input.split(delimiter);
+    	
+        if(isEmpty(input)) {
+        	return 0;
+        }
+        if(input.length() == 1) {
+        	return stringToInt(input);
+        }
+        else {
+      	return getSum(numbers[0],numbers[1]);
+       	int sum=0;
+            for(int i=0;i<numbers.length;i++) {
+       		 sum = sum+Integer.parseInt(numbers[i]);
+     	}
+       	return sum;
+        	return getSum(numbers);
         }
     }
+    
+    private int getSum(String numbers[]) throws Exception {
+    	findDangerousInput(numbers);
+      	int sum=0;
+    	for(String current:numbers) {
+    		if(stringToInt(current)>1000) {
+    			continue;
+    		}
+    		 sum = sum+Integer.parseInt(current);
+    	}
+    	return sum;
+    }
+    
+    private void findDangerousInput(String numbers[])throws Exception {
+    	for(String current:numbers) {
+    		if(stringToInt(current)<0) {
+    			throw new Exception("negatives not allowed");
+    		}
+    	}
+    }
+    
+    private boolean isEmpty(String input) {
+    	return input.isEmpty();
+    }
+    
+    private int stringToInt(String input) {
+    	 return Integer.parseInt(input);
+    }
+}
