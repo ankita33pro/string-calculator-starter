@@ -41,4 +41,4 @@ class StringCalculatorShould {
    	assertEquals(stringCalculator.add("10,10,1001"),20);
    }
 }
-© 2021 GitHub, Inc.
+
